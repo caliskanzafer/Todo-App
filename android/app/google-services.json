@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "562234426796",
+    "project_id": "gorevlerapp",
+    "storage_bucket": "gorevlerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562234426796:android:3549ac7ff3e79e924ca609",
+        "android_client_info": {
+          "package_name": "com.example.todo_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562234426796-oh3535id5vp1lc3mqm957n0vs1dmp59t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.todo_app",
+            "certificate_hash": "6e5056814e97bc269a8a7da81ef6d99504d27912"
+          }
+        },
+        {
+          "client_id": "562234426796-irnvu6atc6f303fgq74snva2qhit1488.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlOUfPIxofaBg7ryhC_Ulm2kvZBZ_x10Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562234426796-irnvu6atc6f303fgq74snva2qhit1488.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
