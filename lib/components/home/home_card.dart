@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class HomeCard extends StatelessWidget {
   final AsyncSnapshot snapshot;
   final int value;
-  HomeCard(this.snapshot, this.value);
+
+  const HomeCard({Key key, @required this.snapshot, @required this.value})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

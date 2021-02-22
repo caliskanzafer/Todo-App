@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class HomeTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
-  HomeTextField(this.controller, this.labelText);
+
+  const HomeTextField(
+      {Key key, @required this.controller, @required this.labelText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

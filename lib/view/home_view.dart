@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/components/home_card.dart';
-import 'package:todo_app/components/home_tab.dart';
-import 'package:todo_app/components/home_text_field.dart';
+import 'package:todo_app/components/home/home_card.dart';
+import 'package:todo_app/components/home/home_tab.dart';
+import 'package:todo_app/components/home/home_text_field.dart';
 import 'package:todo_app/core/services/services.dart';
 
 class HomeView extends StatefulWidget {
@@ -89,24 +89,6 @@ class _HomeViewState extends State<HomeView> {
               setState(() {
                 service.updateTask(snapshot.data[value]);
               });
-              Scaffold.of(context).showSnackBar(SnackBar(
-                  duration: Duration(seconds: 2),
-                  content: Container(
-                    height: 20,
-                    child: Row(
-                      children: [
-                        Text('Task done'),
-                        Spacer(),
-                        FlatButton(
-                            onPressed: () {
-                              setState(() {
-                                service.undoUpdateTask(snapshot.data[value]);
-                              });
-                            },
-                            child: Text('UNDO')),
-                      ],
-                    ),
-                  )));
             } else {
               setState(() {
                 service.deleteTask(snapshot.data[value].key);
@@ -132,7 +114,7 @@ class _HomeViewState extends State<HomeView> {
             }
           },
           child: !snapshot.data[value].done
-              ? HomeCard(snapshot, value)
+              ? HomeCard(snapshot: snapshot, value: value)
               : SizedBox.shrink(),
         );
       },
@@ -177,7 +159,7 @@ class _HomeViewState extends State<HomeView> {
             }
           },
           child: snapshot.data[value].done
-              ? HomeCard(snapshot, value)
+              ? HomeCard(snapshot: snapshot, value: value)
               : SizedBox.shrink(),
         );
       },
@@ -194,8 +176,8 @@ class _HomeViewState extends State<HomeView> {
             });
           },
           tabs: [
-            HomeTab('Tasks'),
-            HomeTab('Done'),
+            HomeTab(text: 'Tasks'),
+            HomeTab(text: 'Done'),
           ]),
     );
   }
@@ -214,9 +196,11 @@ class _HomeViewState extends State<HomeView> {
                   key: formKey,
                   child: Column(
                     children: [
-                      HomeTextField(taskName, 'Task Name'),
+                      HomeTextField(
+                          controller: taskName, labelText: 'Task Name'),
                       SizedBox(height: 10),
-                      HomeTextField(taskDescripton, 'Description'),
+                      HomeTextField(
+                          controller: taskDescripton, labelText: 'Description'),
                       FlatButton(
                           onPressed: () {
                             setState(() {

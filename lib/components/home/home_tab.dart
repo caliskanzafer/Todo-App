@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class HomeTab extends StatelessWidget {
   final String text;
-  HomeTab(this.text);
+
+  const HomeTab({Key key, @required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
