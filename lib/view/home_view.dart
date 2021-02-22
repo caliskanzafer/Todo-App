@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/components/home_card.dart';
+import 'package:todo_app/components/home_tab.dart';
+import 'package:todo_app/components/home_text_field.dart';
 import 'package:todo_app/core/services/services.dart';
 
 class HomeView extends StatefulWidget {
@@ -129,7 +132,7 @@ class _HomeViewState extends State<HomeView> {
             }
           },
           child: !snapshot.data[value].done
-              ? _card(snapshot, value)
+              ? HomeCard(snapshot, value)
               : SizedBox.shrink(),
         );
       },
@@ -149,6 +152,10 @@ class _HomeViewState extends State<HomeView> {
                 service.undoUpdateTask(snapshot.data[value]);
               });
 
+              /// Extension olabilir burasi
+              /// Yada Component
+              /// Kod tekrari var
+              /// TODO:
               Scaffold.of(context).showSnackBar(SnackBar(
                   duration: Duration(seconds: 2),
                   content: Container(
@@ -170,7 +177,7 @@ class _HomeViewState extends State<HomeView> {
             }
           },
           child: snapshot.data[value].done
-              ? _card(snapshot, value)
+              ? HomeCard(snapshot, value)
               : SizedBox.shrink(),
         );
       },
@@ -187,18 +194,8 @@ class _HomeViewState extends State<HomeView> {
             });
           },
           tabs: [
-            Tab(
-              child: Text(
-                'Tasks',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Tab(
-              child: Text(
-                'Done',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+            HomeTab('Tasks'),
+            HomeTab('Done'),
           ]),
     );
   }
@@ -217,25 +214,9 @@ class _HomeViewState extends State<HomeView> {
                   key: formKey,
                   child: Column(
                     children: [
-                      TextField(
-                        controller: taskName,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          labelText: 'Task Name',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: taskDescripton,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          labelText: 'Description',
-                        ),
-                      ),
+                      HomeTextField(taskName, 'Task Name'),
+                      SizedBox(height: 10),
+                      HomeTextField(taskDescripton, 'Description'),
                       FlatButton(
                           onPressed: () {
                             setState(() {
@@ -257,15 +238,6 @@ class _HomeViewState extends State<HomeView> {
       child: Icon(Icons.add),
     );
   }
-}
-
-Card _card(AsyncSnapshot snapshot, int value) {
-  return Card(
-    child: ListTile(
-      title: Text(snapshot.data[value].task),
-      subtitle: Text(snapshot.data[value].description),
-    ),
-  );
 }
 
 get _circularProgressIndicator => CircularProgressIndicator();
