@@ -13,10 +13,10 @@ class Task {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['task'] = this.task;
-    data['description'] = this.description;
-    data['done'] = this.done;
+    final data = <String, dynamic>{};
+    data['task'] = task;
+    data['description'] = description;
+    data['done'] = done;
     return data;
   }
 }

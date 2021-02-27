@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/components/home/home_card.dart';
-import 'package:todo_app/components/home/home_tab.dart';
-import 'package:todo_app/components/home/home_text_field.dart';
-import 'package:todo_app/core/services/services.dart';
+import '../../components/home/home_card.dart';
+import '../../components/home/home_tab.dart';
+import '../../components/home/home_text_field.dart';
+import '../../core/services/services.dart';
+
+part 'home_string_values.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  _HomeStringValues texts = _HomeStringValues();
   FirebaseService service;
   final formKey = GlobalKey<FormState>();
   TextEditingController taskName = TextEditingController();
@@ -43,10 +46,11 @@ class _HomeViewState extends State<HomeView> {
               case ConnectionState.done:
                 if (snapshot.hasData) {
                   return _taskListViewBuilder(snapshot);
-                } else
+                } else {
                   return Center(
                     child: _circularProgressIndicator,
                   );
+                }
                 break;
               default:
                 return Center(
@@ -62,10 +66,11 @@ class _HomeViewState extends State<HomeView> {
               case ConnectionState.done:
                 if (snapshot.hasData) {
                   return _doneListViewBuilder(snapshot);
-                } else
+                } else {
                   return Center(
                     child: _circularProgressIndicator,
                   );
+                }
                 break;
               default:
                 return Center(
@@ -99,7 +104,7 @@ class _HomeViewState extends State<HomeView> {
                     height: 20,
                     child: Row(
                       children: [
-                        Text('Task deleted'),
+                        Text('${texts.taskDeleted}'),
                         Spacer(),
                         FlatButton(
                             onPressed: () {
@@ -107,7 +112,7 @@ class _HomeViewState extends State<HomeView> {
                                 service.undoDeletedTask(snapshot.data[value]);
                               });
                             },
-                            child: Text('UNDO')),
+                            child: Text('${texts.undo}')),
                       ],
                     ),
                   )));
@@ -133,18 +138,13 @@ class _HomeViewState extends State<HomeView> {
               setState(() {
                 service.undoUpdateTask(snapshot.data[value]);
               });
-
-              /// Extension olabilir burasi
-              /// Yada Component
-              /// Kod tekrari var
-              /// TODO:
               Scaffold.of(context).showSnackBar(SnackBar(
                   duration: Duration(seconds: 2),
                   content: Container(
                     height: 20,
                     child: Row(
                       children: [
-                        Text('Task status changed'),
+                        Text('${texts.taskStatusChanged}'),
                         Spacer(),
                         FlatButton(
                             onPressed: () {
@@ -152,7 +152,7 @@ class _HomeViewState extends State<HomeView> {
                                 service.updateTask(snapshot.data[value]);
                               });
                             },
-                            child: Text('UNDO')),
+                            child: Text('${texts.undo}')),
                       ],
                     ),
                   )));
@@ -176,8 +176,8 @@ class _HomeViewState extends State<HomeView> {
             });
           },
           tabs: [
-            HomeTab(text: 'Tasks'),
-            HomeTab(text: 'Done'),
+            HomeTab(text: '${texts.tabTasks}'),
+            HomeTab(text: '${texts.tabDone}'),
           ]),
     );
   }
@@ -197,10 +197,11 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     children: [
                       HomeTextField(
-                          controller: taskName, labelText: 'Task Name'),
+                          controller: taskName, labelText: '${texts.taskName}'),
                       SizedBox(height: 10),
                       HomeTextField(
-                          controller: taskDescripton, labelText: 'Description'),
+                          controller: taskDescripton,
+                          labelText: '${texts.description}'),
                       FlatButton(
                           onPressed: () {
                             setState(() {
@@ -210,7 +211,7 @@ class _HomeViewState extends State<HomeView> {
                               taskDescripton.clear();
                             });
                           },
-                          child: Text('Kaydet')),
+                          child: Text('${texts.save}')),
                     ],
                   ),
                 ),
@@ -224,4 +225,5 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-get _circularProgressIndicator => CircularProgressIndicator();
+CircularProgressIndicator get _circularProgressIndicator =>
+    CircularProgressIndicator();
