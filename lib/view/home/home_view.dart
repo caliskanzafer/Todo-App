@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/core/services/services.dart';
+import '../../components/home/home_card.dart';
+import '../../components/home/home_tab.dart';
+import '../../components/home/home_text_field.dart';
+import '../../core/services/services.dart';
+
+part 'home_string_values.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -7,6 +12,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  _HomeStringValues texts = _HomeStringValues();
   FirebaseService service;
   final formKey = GlobalKey<FormState>();
   TextEditingController taskName = TextEditingController();
@@ -40,10 +46,11 @@ class _HomeViewState extends State<HomeView> {
               case ConnectionState.done:
                 if (snapshot.hasData) {
                   return _taskListViewBuilder(snapshot);
-                } else
+                } else {
                   return Center(
                     child: _circularProgressIndicator,
                   );
+                }
                 break;
               default:
                 return Center(
@@ -59,10 +66,11 @@ class _HomeViewState extends State<HomeView> {
               case ConnectionState.done:
                 if (snapshot.hasData) {
                   return _doneListViewBuilder(snapshot);
-                } else
+                } else {
                   return Center(
                     child: _circularProgressIndicator,
                   );
+                }
                 break;
               default:
                 return Center(
@@ -86,50 +94,32 @@ class _HomeViewState extends State<HomeView> {
               setState(() {
                 service.updateTask(snapshot.data[value]);
               });
-              Scaffold.of(context).showSnackBar(SnackBar(
-                  duration: Duration(seconds: 2),
-                  content: Container(
-                    height: 20,
-                    child: Row(
-                      children: [
-                        Text('Task done'),
-                        Spacer(),
-                        FlatButton(
-                            onPressed: () {
-                              setState(() {
-                                service.undoUpdateTask(snapshot.data[value]);
-                              });
-                            },
-                            child: Text('UNDO')),
-                      ],
-                    ),
-                  )));
             } else {
               setState(() {
                 service.deleteTask(snapshot.data[value].key);
               });
-              Scaffold.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   duration: Duration(seconds: 2),
                   content: Container(
                     height: 20,
                     child: Row(
                       children: [
-                        Text('Task deleted'),
+                        Text('${texts.taskDeleted}'),
                         Spacer(),
-                        FlatButton(
+                        TextButton(
                             onPressed: () {
                               setState(() {
                                 service.undoDeletedTask(snapshot.data[value]);
                               });
                             },
-                            child: Text('UNDO')),
+                            child: Text('${texts.undo}')),
                       ],
                     ),
                   )));
             }
           },
           child: !snapshot.data[value].done
-              ? _card(snapshot, value)
+              ? HomeCard(snapshot: snapshot, value: value)
               : SizedBox.shrink(),
         );
       },
@@ -148,29 +138,28 @@ class _HomeViewState extends State<HomeView> {
               setState(() {
                 service.undoUpdateTask(snapshot.data[value]);
               });
-
-              Scaffold.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   duration: Duration(seconds: 2),
                   content: Container(
                     height: 20,
                     child: Row(
                       children: [
-                        Text('Task status changed'),
+                        Text('${texts.taskStatusChanged}'),
                         Spacer(),
-                        FlatButton(
+                        TextButton(
                             onPressed: () {
                               setState(() {
                                 service.updateTask(snapshot.data[value]);
                               });
                             },
-                            child: Text('UNDO')),
+                            child: Text('${texts.undo}')),
                       ],
                     ),
                   )));
             }
           },
           child: snapshot.data[value].done
-              ? _card(snapshot, value)
+              ? HomeCard(snapshot: snapshot, value: value)
               : SizedBox.shrink(),
         );
       },
@@ -187,18 +176,8 @@ class _HomeViewState extends State<HomeView> {
             });
           },
           tabs: [
-            Tab(
-              child: Text(
-                'Tasks',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Tab(
-              child: Text(
-                'Done',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+            HomeTab(text: '${texts.tabTasks}'),
+            HomeTab(text: '${texts.tabDone}'),
           ]),
     );
   }
@@ -217,26 +196,13 @@ class _HomeViewState extends State<HomeView> {
                   key: formKey,
                   child: Column(
                     children: [
-                      TextField(
-                        controller: taskName,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          labelText: 'Task Name',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: taskDescripton,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          labelText: 'Description',
-                        ),
-                      ),
-                      FlatButton(
+                      HomeTextField(
+                          controller: taskName, labelText: '${texts.taskName}'),
+                      SizedBox(height: 10),
+                      HomeTextField(
+                          controller: taskDescripton,
+                          labelText: '${texts.description}'),
+                      TextButton(
                           onPressed: () {
                             setState(() {
                               service.addTask(
@@ -245,7 +211,7 @@ class _HomeViewState extends State<HomeView> {
                               taskDescripton.clear();
                             });
                           },
-                          child: Text('Kaydet')),
+                          child: Text('${texts.save}')),
                     ],
                   ),
                 ),
@@ -259,13 +225,5 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-Card _card(AsyncSnapshot snapshot, int value) {
-  return Card(
-    child: ListTile(
-      title: Text(snapshot.data[value].task),
-      subtitle: Text(snapshot.data[value].description),
-    ),
-  );
-}
-
-get _circularProgressIndicator => CircularProgressIndicator();
+CircularProgressIndicator get _circularProgressIndicator =>
+    CircularProgressIndicator();
