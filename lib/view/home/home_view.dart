@@ -98,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
               setState(() {
                 service.deleteTask(snapshot.data[value].key);
               });
-              Scaffold.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   duration: Duration(seconds: 2),
                   content: Container(
                     height: 20,
@@ -106,7 +106,7 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         Text('${texts.taskDeleted}'),
                         Spacer(),
-                        FlatButton(
+                        TextButton(
                             onPressed: () {
                               setState(() {
                                 service.undoDeletedTask(snapshot.data[value]);
@@ -138,7 +138,7 @@ class _HomeViewState extends State<HomeView> {
               setState(() {
                 service.undoUpdateTask(snapshot.data[value]);
               });
-              Scaffold.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   duration: Duration(seconds: 2),
                   content: Container(
                     height: 20,
@@ -146,7 +146,7 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         Text('${texts.taskStatusChanged}'),
                         Spacer(),
-                        FlatButton(
+                        TextButton(
                             onPressed: () {
                               setState(() {
                                 service.updateTask(snapshot.data[value]);
@@ -202,7 +202,7 @@ class _HomeViewState extends State<HomeView> {
                       HomeTextField(
                           controller: taskDescripton,
                           labelText: '${texts.description}'),
-                      FlatButton(
+                      TextButton(
                           onPressed: () {
                             setState(() {
                               service.addTask(

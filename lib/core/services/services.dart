@@ -76,7 +76,6 @@ class FirebaseService {
       }),
     );
 
-    print(response.statusCode);
     switch (response.statusCode) {
       case HttpStatus.ok:
         return true;
